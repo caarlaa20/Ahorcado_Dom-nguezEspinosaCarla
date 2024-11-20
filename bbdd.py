@@ -1,14 +1,16 @@
 import mysql.connector
 
 
+
 class BBDD:
     def __init__(self, host, user, password, database):
         try:
             self.conn = mysql.connector.connect(
-                host=host,
-                user=user,
-                password=password,
-                database=database
+                host="localhost",
+                user="root",
+                password="",
+                port="3306",
+                database="JuegoAhorcado"
             )
             self.cursor = self.conn.cursor()
             print("Conexión a la base de datos exitosa.")
