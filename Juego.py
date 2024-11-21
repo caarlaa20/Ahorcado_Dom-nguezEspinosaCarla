@@ -42,7 +42,7 @@ class Juego:
         # Registrar al jugador en la base de datos
         self.jugador_id = self.bbdd.registrar_jugador(self.nombre_jugador)
 
-        # Inicialización de variables
+
         self.intentos = 6
         self.palabra_secreta = random.choice(self.palabras)  # Elegir palabra aleatoria
         self.letras_adivinadas = []
@@ -205,18 +205,29 @@ class Juego:
             if "_" not in self.palabra_mostrada:
                 self.partidas_ganadas += 1
                 self.label_estadisticas.config(
-                    text=f"Ganadas: {self.partidas_ganadas} - Perdidas: {self.partidas_perdidas}")
+                    text=f"Ganadas: {self.partidas_ganadas} - Perdidas: {self.partidas_perdidas}"
+                )
+
+                # Actualizar las estadísticas en la base de datos
+                self.bbdd.actualizar_estadisticas(self.jugador_id, ganadas=1)
+
                 messagebox.showinfo("¡Ganaste!", f"¡Felicidades {self.nombre_jugador}! Has adivinado la palabra.")
                 self.boton_reset.config(state=tk.NORMAL)
 
         else:
             # Restar intentos si la letra no está en la palabra secreta
             self.intentos -= 1
-            self.mostrar_imagen_centrada(self.imagenes[6 - self.intentos])  # Mostrar la imagen correspondiente al intento
+            self.mostrar_imagen_centrada(
+                self.imagenes[6 - self.intentos])  # Mostrar la imagen correspondiente al intento
             if self.intentos == 0:
                 self.partidas_perdidas += 1
                 self.label_estadisticas.config(
-                    text=f"Ganadas: {self.partidas_ganadas} - Perdidas: {self.partidas_perdidas}")
+                    text=f"Ganadas: {self.partidas_ganadas} - Perdidas: {self.partidas_perdidas}"
+                )
+
+                # Actualizar las estadísticas en la base de datos
+                self.bbdd.actualizar_estadisticas(self.jugador_id, perdidas=1)
+
                 messagebox.showinfo("Perdiste", f"Perdiste, la palabra era: {self.palabra_secreta}")
                 self.boton_reset.config(state=tk.NORMAL)
 
